@@ -1,0 +1,17 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: [self-hosted]
+
+    steps:
+      - name: deploy
+        run: |
+          cd /home/koffer/CryptoTrading_V4
+          git pull
+          docker-compose up -d --build scheduler_service
