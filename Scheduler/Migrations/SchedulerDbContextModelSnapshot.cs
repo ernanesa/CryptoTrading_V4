@@ -21,7 +21,7 @@ namespace Scheduler.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Scheduler.Entity.Schedule", b =>
+            modelBuilder.Entity("Scheduler.Entities.Schedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
