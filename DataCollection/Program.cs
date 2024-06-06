@@ -37,4 +37,18 @@ app.MapGet("/saveSymbols", () =>
     };
 });
 
+app.MapGet("/saveTickers", () =>
+{
+    using var scope = app.Services.CreateScope();
+    var dataCollectionService = scope.ServiceProvider.GetRequiredService<TickerService>();
+    var result = dataCollectionService.CollectAndSaveTickersAsync().Result;
+
+    return result switch
+    {
+        1 => Results.Ok($"Saved {result} ticker"),
+        > 1 => Results.Ok($"Saved {result} tickers"),
+        _ => Results.Ok("No tickers to save")
+    };
+});
+
 app.Run();
