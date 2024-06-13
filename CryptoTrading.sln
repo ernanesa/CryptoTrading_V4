@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCollection", "DataCollection\DataCollection.csproj", "{9526670A-4FCC-4671-8662-9F132010CD13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCollection.Tests", "DataCollection.Tests\DataCollection.Tests.csproj", "{F47487BC-31E2-45F0-A4F6-216C25FC5765}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{9526670A-4FCC-4671-8662-9F132010CD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9526670A-4FCC-4671-8662-9F132010CD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9526670A-4FCC-4671-8662-9F132010CD13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
