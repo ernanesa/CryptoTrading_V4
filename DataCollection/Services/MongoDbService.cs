@@ -16,9 +16,19 @@ namespace DataCollection.Services
             _tickersCollection = mongoDatabase.GetCollection<Ticker>(mongoDbSettings.Value.TickersCollectionName);
         }
 
-        public async Task SaveTickersAsync(IEnumerable<Ticker> ticker)
+        public async Task SaveTickersAsync(IEnumerable<Ticker> tickers)
         {
-            await _tickersCollection.InsertManyAsync(ticker);
+            await _tickersCollection.InsertManyAsync(tickers);
+        }
+
+        public async Task DeleteManyAsync(FilterDefinition<Ticker> filter)
+        {
+            await _tickersCollection.DeleteManyAsync(filter);
+        }
+
+        public async Task<List<Ticker>> FindAsync(FilterDefinition<Ticker> filter)
+        {
+            return await _tickersCollection.Find(filter).ToListAsync();
         }
     }
 }

@@ -4,8 +4,19 @@ using DataCollection.Entities;
 
 namespace DataCollection.Services
 {
-    public class SymbolService(IConfiguration configuration, DataCollectionDbContext context, HttpClient httpClient)
+    public class SymbolService
     {
+        private readonly IConfiguration _configuration;
+        private readonly DataCollectionDbContext _context;
+        private readonly HttpClient _httpClient;
+
+        public SymbolService(IConfiguration configuration, DataCollectionDbContext context, HttpClient httpClient)
+        {
+            _configuration = configuration;
+            _context = context;
+            _httpClient = httpClient;
+        }
+
         public async Task<int> SaveSymbolsAsync()
         {
             var symbolsFromApi = await FetchSymbolsFromApiAsync();
@@ -13,11 +24,10 @@ namespace DataCollection.Services
 
             var newSymbols = symbolsFromApi.Where(apiSymbol => symbolsFromDatabase.All(dbSymbol => dbSymbol.SymbolName != apiSymbol.SymbolName)).ToList();
 
-            if (newSymbols.Count != 0)
-            {
-                context.Symbols.AddRange(newSymbols);
-                await context.SaveChangesAsync();
-            }
+            if (newSymbols.Count == 0) return newSymbols.Count;
+
+            _context.Symbols.AddRange(newSymbols);
+            await _context.SaveChangesAsync();
 
             return newSymbols.Count;
         }
@@ -25,7 +35,7 @@ namespace DataCollection.Services
         private async Task<List<Symbol>> FetchSymbolsFromApiAsync()
         {
             var symbols = new List<Symbol>();
-            var response = await httpClient.GetAsync($"{configuration["ApiUrlMercadobitcoinV4"]}symbols");
+            var response = await _httpClient.GetAsync($"{_configuration["ApiUrlMercadobitcoinV4"]}symbols");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -58,7 +68,7 @@ namespace DataCollection.Services
                 }
             }
 
-            return [.. symbols.OrderBy(s => s.SymbolName)];
+            return symbols.OrderBy(s => s.SymbolName).ToList();
         }
 
         private static double ParseDouble(string value)
@@ -77,12 +87,12 @@ namespace DataCollection.Services
         {
             try
             {
-                return [.. context.Symbols];
+                return _context.Symbols.ToList();
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Error fetching symbols from database: {e.Message}");
-                return [];
+                return new List<Symbol>();
             }
         }
 
