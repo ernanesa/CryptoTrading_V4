@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:dotnet test --collect:"XPlat Code Coverage"
+        with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       
       - name: Set up JDK 17
@@ -28,7 +28,7 @@ jobs:
           dotnet-version: '8.0'
       
       - name: Cache SonarQube packages
-        uses: actions/cache@v2dotnet test --collect:"XPlat Code Coverage"
+        uses: actions/cache@v2
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -53,9 +53,9 @@ jobs:
           mkdir -p TestResults/Coverage
           dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" /p:CoverletOutputFormat=opencover /p:CoverletOutput=TestResults/Coverage/
 
-          - name: Run SonarQube Scanner
-          run: |
-            dotnet sonarscanner begin /k:"${{ secrets.PROJECT_KEY }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"  /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-            dotnet build --no-incremental --configuration Release
-            dotnet test --collect:"XPlat Code Coverage"
-            dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      - name: Run SonarQube Scanner
+        run: |
+          dotnet sonarscanner begin /k:"${{ secrets.PROJECT_KEY }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/Coverage/**/*.xml"
+          dotnet build --no-incremental --configuration Release
+          dotnet test --collect:"XPlat Code Coverage"
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
