@@ -1,0 +1,67 @@
+networks:
+  backend:
+
+
+volumes:
+  pgdata:
+  mongodata:
+
+
+services:
+  postgres_service:
+    container_name: ct_postgres
+    image: postgres:16
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - backend
+    restart: on-failure:3
+
+  mongo_service:
+    container_name: ct_mongo
+    image: mongo:8.0-rc
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - backend
+    restart: on-failure:3
+
+  scheduler_service:
+    depends_on:
+      - postgres_service
+    container_name: ct_scheduler
+    image: ct-scheduler
+    build:
+      context: Scheduler
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - backend
+    restart: on-failure:3
+
+  datacollection_service:
+    depends_on:
+      - postgres_service
+      - mongo_service
+    container_name: ct_datacollection
+    image: ct-datacollection
+    build:
+      context: DataCollection
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - backend
+    restart: on-failure:3
