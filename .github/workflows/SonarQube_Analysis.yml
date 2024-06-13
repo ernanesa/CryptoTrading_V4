@@ -57,5 +57,4 @@ jobs:
         run: |
           dotnet sonarscanner begin /k:"${{ secrets.PROJECT_KEY }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/Coverage/**/*.xml"
           dotnet build --no-incremental --configuration Release
-          dotnet test --collect:"XPlat Code Coverage"
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
