@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCollection", "DataColle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCollection.Tests", "DataCollection.Tests\DataCollection.Tests.csproj", "{F47487BC-31E2-45F0-A4F6-216C25FC5765}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recommendation", "Recommendation\Recommendation.csproj", "{75630FAF-5A4F-465C-9D9C-016CCC169AB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +37,9 @@ Global
 		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F47487BC-31E2-45F0-A4F6-216C25FC5765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75630FAF-5A4F-465C-9D9C-016CCC169AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75630FAF-5A4F-465C-9D9C-016CCC169AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75630FAF-5A4F-465C-9D9C-016CCC169AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75630FAF-5A4F-465C-9D9C-016CCC169AB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

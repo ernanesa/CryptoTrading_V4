@@ -60,6 +60,25 @@ services:
     build:
       context: DataCollection
       dockerfile: Dockerfile
+    ports:
+      - "7001:7001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - backend
+    restart: on-failure:3
+
+  recommendation_service:
+    depends_on:
+      - postgres_service
+      - mongo_service
+    container_name: ct_recommendation
+    image: ct-recommendation
+    build:
+      context: Recommendation
+      dockerfile: Dockerfile
+    ports:
+      - "7003:7003"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
     networks:
