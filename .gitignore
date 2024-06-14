@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 **/appsettings.Development.json
 **/appsettings.Production.json
 .vscode/settings.json
+Recommendation/Models/Ticker/*_Model.zip
