@@ -23,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapGet("/", () => "DataCollection API is running");
+
 app.MapGet("/saveSymbols", () =>
 {
     using var scope = app.Services.CreateScope();

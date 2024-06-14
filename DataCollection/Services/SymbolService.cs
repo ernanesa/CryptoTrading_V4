@@ -68,7 +68,7 @@ namespace DataCollection.Services
                 }
             }
 
-            return symbols.OrderBy(s => s.SymbolName).ToList();
+            return [.. symbols.OrderBy(s => s.SymbolName)];
         }
 
         private static double ParseDouble(string value)
@@ -92,7 +92,7 @@ namespace DataCollection.Services
             catch (Exception e)
             {
                 Console.WriteLine($"Error fetching symbols from database: {e.Message}");
-                return new List<Symbol>();
+                return [];
             }
         }
 
