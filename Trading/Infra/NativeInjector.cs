@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Trading.Data.MongoDB;
 using Trading.Data.PostgreSQL;
+using Trading.Repositories;
 using Trading.Services;
 
 namespace Trading.Infra;
@@ -38,6 +39,20 @@ public class NativeInjector
 
         services.AddHttpClient();
 
+
+        #region Services
         services.AddSingleton<MongoDbService>();
+        // services.AddScoped<SystemConfigurationService>();
+        // services.AddScoped<TickerService>();
+        services.AddScoped<UserService>();
+        #endregion
+
+        #region Repositories
+        services.AddScoped<UserRepository>();
+        // services.AddScoped<SystemConfigurationRepository>();
+        // services.AddScoped<TickerRepository>();
+        // services.AddScoped<OrderRepository>();
+        #endregion
+
     }
 }
