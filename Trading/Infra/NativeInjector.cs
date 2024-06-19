@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -45,6 +46,8 @@ public class NativeInjector
         // services.AddScoped<SystemConfigurationService>();
         // services.AddScoped<TickerService>();
         services.AddScoped<UserService>();
+        services.AddScoped<AuthenticationService>();
+        // services.AddScoped<AccountService>();
         #endregion
 
         #region Repositories
@@ -52,7 +55,14 @@ public class NativeInjector
         // services.AddScoped<SystemConfigurationRepository>();
         // services.AddScoped<TickerRepository>();
         // services.AddScoped<OrderRepository>();
+        // services.AddScoped<AccountRepository>();
         #endregion
 
+        // Configurar HttpClient
+        services.AddHttpClient<Services.AuthenticationService>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["ApiUrlMercadobitcoinV4"]);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        });
     }
 }
