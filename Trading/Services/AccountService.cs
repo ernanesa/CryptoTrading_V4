@@ -1,0 +1,20 @@
+using Trading.Entities;
+using Trading.Repositories;
+
+namespace Trading.Services
+{
+    public class AccountService
+    {
+        private readonly AccountRepository _accountRepository;
+
+        public AccountService(AccountRepository accountRepository)
+        {
+            _accountRepository = accountRepository;
+        }
+
+        public async Task<List<Balance>> GetAccountBalancesAsync(User user)
+        {
+            return await _accountRepository.GetAccountBalancesAsync(user);
+        }
+    }
+}

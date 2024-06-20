@@ -47,7 +47,7 @@ public class NativeInjector
         // services.AddScoped<TickerService>();
         services.AddScoped<UserService>();
         services.AddScoped<AuthenticationService>();
-        // services.AddScoped<AccountService>();
+        services.AddScoped<AccountService>();
         #endregion
 
         #region Repositories
@@ -55,11 +55,11 @@ public class NativeInjector
         // services.AddScoped<SystemConfigurationRepository>();
         // services.AddScoped<TickerRepository>();
         // services.AddScoped<OrderRepository>();
-        // services.AddScoped<AccountRepository>();
+        services.AddScoped<AccountRepository>();
         #endregion
 
         // Configurar HttpClient
-        services.AddHttpClient<Services.AuthenticationService>(client =>
+        services.AddHttpClient<AuthenticationService>(client =>
         {
             client.BaseAddress = new Uri(configuration["ApiUrlMercadobitcoinV4"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
