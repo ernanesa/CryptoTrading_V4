@@ -36,11 +36,6 @@ app.MapGet("activeUsers", async (UserService userService) =>
     return await userService.GetAllActiveUsersAsync();
 });
 
-app.MapGet("accountBalances", async (AccountService accountService) =>
-{
-    return await accountService.GetAccountBalancesAsync("123");
-});
-
 app.MapGet("/authenticate", async (AuthenticationService authService, UserService userService) =>
 {
     try
@@ -55,6 +50,35 @@ app.MapGet("/authenticate", async (AuthenticationService authService, UserServic
         return Results.Problem(ex.Message);
     }
 });
+
+app.MapGet("GetAccountBalances", async (AccountService accountService, AuthenticationService authService, UserService userService) =>
+{
+    var users = await userService.GetAllActiveUsersAsync();
+    var user = users.FirstOrDefault();
+    await authService.AuthenticateAsync(user);
+
+    return await accountService.GetAccountBalancesAsync(user);
+});
+
+app.MapGet("GetTotalBalance", async (AccountService accountService, AuthenticationService authService, UserService userService) =>
+{
+    var users = await userService.GetAllActiveUsersAsync();
+    var user = users.FirstOrDefault();
+    await authService.AuthenticateAsync(user);
+
+    return await accountService.GetTotalBalanceAsync(user);
+});
+
+app.MapGet("GetRealAvailable", async (AccountService accountService, AuthenticationService authService, UserService userService) =>
+{
+    var users = await userService.GetAllActiveUsersAsync();
+    var user = users.FirstOrDefault();
+    await authService.AuthenticateAsync(user);
+
+    return await accountService.GetAccountBalanceAvailableInRealAsync(user);
+});
+
+
 
 // app.MapGet("/Buy", () =>
 // {

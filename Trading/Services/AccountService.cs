@@ -21,5 +21,10 @@ namespace Trading.Services
         {
             return await _accountRepository.GetTotalBalanceAsync(user);
         }
+
+        public async Task<Balance> GetAccountBalanceAvailableInRealAsync(User user)
+        {
+            return await _accountRepository.GetAccountBalanceAvailableInRealAsync(user);
+        }
     }
 }

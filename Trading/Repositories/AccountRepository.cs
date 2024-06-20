@@ -15,7 +15,7 @@ namespace Trading.Repositories
                 var content = await response.Content.ReadAsStringAsync();
                 var accounts = JsonSerializer.Deserialize<List<Account>>(content);
 
-                return accounts.FirstOrDefault(a => a.Name.ToLower() == "main");
+                return accounts.FirstOrDefault(a => a.Name.Equals("main", StringComparison.CurrentCultureIgnoreCase));
             }
 
             throw new Exception($"Failed to fetch account. Status code: {response.StatusCode}");
@@ -38,24 +38,58 @@ namespace Trading.Repositories
             throw new Exception($"Failed to fetch balances. Status code: {response.StatusCode}");
         }
 
+        public async Task<List<Balance>> GetAccountBalancesAvailableAsync(User user)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", user.AccessToken);
+            var account = await GetMainAccountAsync(user);
+            var response = await _httpClient.GetAsync($"accounts/{account.Id}/balances");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // return only currencies with a positive balance
+                var content = await response.Content.ReadAsStringAsync();
+                var balances = JsonSerializer.Deserialize<List<Balance>>(content);
+                return balances.Where(b => b.Available != "0.00000000").ToList();
+            }
+
+            throw new Exception($"Failed to fetch balances. Status code: {response.StatusCode}");
+        }
+
+        public async Task<Balance> GetAccountBalanceAvailableInRealAsync(User user)  // Retorna moedas com saldo disponível
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", user.AccessToken);
+            var account = await GetMainAccountAsync(user);
+            var response = await _httpClient.GetAsync($"accounts/{account.Id}/balances");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // return only currencies with a positive balance
+                var content = await response.Content.ReadAsStringAsync();
+                var balances = JsonSerializer.Deserialize<List<Balance>>(content);
+                return balances.FirstOrDefault(b => b.Symbol == "BRL");
+            }
+
+            throw new Exception($"Failed to fetch balances. Status code: {response.StatusCode}");
+        }
+
         public async Task<decimal> GetTotalBalanceAsync(User user)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", user.AccessToken);
             var account = await GetMainAccountAsync(user);
             var balanceResponse = await _httpClient.GetAsync($"accounts/{account.Id}/balances");
-            
+
             if (balanceResponse.IsSuccessStatusCode)
             {
                 // return only currencies with a positive balance
                 var content = await balanceResponse.Content.ReadAsStringAsync();
                 var balances = JsonSerializer.Deserialize<List<Balance>>(content);
-                var positiveBalances= balances.Where(b => b.Total != "0.00000000").ToList();
-                var listSymbols  = positiveBalances.Select(b => b.Symbol).ToList();
+                var positiveBalances = balances.Where(b => b.Total != "0.00000000").ToList();
+                var listSymbols = positiveBalances.Select(b => b.Symbol).ToList();
                 var tickersRequest = CollectTickersAsync(listSymbols).Result;
 
                 var total = positiveBalances.Sum(b =>
                 {
-                    var ticker = tickersRequest.FirstOrDefault(t => t.Pair == b.Symbol+"-BRL");
+                    var ticker = tickersRequest.FirstOrDefault(t => t.Pair == b.Symbol + "-BRL");
                     return decimal.Parse(b.Total) * decimal.Parse(ticker.Last);
                 });
 
@@ -68,7 +102,8 @@ namespace Trading.Repositories
 
         private async Task<List<TickerRequest>> CollectTickersAsync(List<string> listSymbols)
         {
-            try{
+            try
+            {
                 if (listSymbols.Count == 0)
                 {
                     return null;
@@ -79,7 +114,7 @@ namespace Trading.Repositories
                 {
                     listSymbols = listSymbols.Select(s => $"{s}-BRL").ToList();
                 }
-                
+
                 var symbols = string.Join(",", listSymbols);
                 var response = await _httpClient.GetAsync($"tickers?symbols={symbols}");
 
