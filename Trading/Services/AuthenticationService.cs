@@ -19,6 +19,7 @@ public class AuthenticationService
     {
         if (_memoryCache.TryGetValue(user.TypeID, out AuthenticationResponse cachedResponse))
         {
+            user.AccessToken = cachedResponse.AccessToken;
             return cachedResponse;
         }
 

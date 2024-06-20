@@ -14,5 +14,8 @@ namespace Trading.Entities
         [Column(TypeName = "varchar(75)")]
         public string Secret { get; set; }
         public bool IsActive { get; set; }
+
+        [NotMapped]
+        public string AccessToken { get; set; }
     }
 }
